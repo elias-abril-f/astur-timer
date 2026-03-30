@@ -1,5 +1,5 @@
 const CACHE_NAME = 'astur-timer-v1';
-const BASE = '/astur-timer';
+const BASE = '';
 
 const PRECACHE_URLS = [
   BASE + '/',
