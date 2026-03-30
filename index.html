@@ -535,12 +535,21 @@
         </div>
       </div>
 
-      <div class="param-card span-2">
+      <div class="param-card">
         <div><div class="param-label">Set rest</div><div class="param-unit">between sets (sec)</div></div>
         <div class="stepper">
           <button class="step-btn" data-key="restSet" data-dir="-1">−</button>
           <div class="step-val time" id="val-restSet">180</div>
           <button class="step-btn" data-key="restSet" data-dir="1">+</button>
+        </div>
+      </div>
+
+      <div class="param-card">
+        <div><div class="param-label">Prepare</div><div class="param-unit">countdown (sec)</div></div>
+        <div class="stepper">
+          <button class="step-btn" data-key="prepare" data-dir="-1">−</button>
+          <div class="step-val time" id="val-prepare">5</div>
+          <button class="step-btn" data-key="prepare" data-dir="1">+</button>
         </div>
       </div>
 
@@ -622,6 +631,7 @@ const cfg = {
   repLen:  { val: 10,  min: 1, max: 300, tapStep: 1,  holdStep: 5  },
   restRep: { val: 30,  min: 1, max: 300, tapStep: 1,  holdStep: 5  },
   restSet: { val: 180, min: 5, max: 600, tapStep: 5,  holdStep: 30 },
+  prepare: { val: 5,   min: 0, max: 60,  tapStep: 1,  holdStep: 5  },
 };
 
 function adj(key, dir) {
@@ -672,16 +682,20 @@ let state = {};
 const CIRCUMFERENCE = 2 * Math.PI * 98;
 
 function startTimer() {
+  const prepVal = cfg.prepare.val;
   state = {
-    phase: 'rep',
+    phase: prepVal > 0 ? 'prepare' : 'rep',
+    pendingPhase:     prepVal > 0 ? 'rep' : null,
+    pendingRemaining: prepVal > 0 ? cfg.repLen.val : null,
     currentRep: 1,
     currentSet: 1,
     totalReps: cfg.reps.val,
     totalSets: cfg.sets.val,
-    repLen:    cfg.repLen.val,
-    restRep:   cfg.restRep.val,
-    restSet:   cfg.restSet.val,
-    remaining: cfg.repLen.val,
+    repLen:     cfg.repLen.val,
+    restRep:    cfg.restRep.val,
+    restSet:    cfg.restSet.val,
+    prepareLen: prepVal,
+    remaining:  prepVal > 0 ? prepVal : cfg.repLen.val,
     paused: false,
   };
   document.getElementById('setup-view').classList.add('hidden');
@@ -704,7 +718,12 @@ function tick() {
 
 function advancePhase() {
   const s = state;
-  if (s.phase === 'rep') {
+  if (s.phase === 'prepare') {
+    s.phase = s.pendingPhase;
+    s.remaining = s.pendingRemaining;
+    s.pendingPhase = null;
+    s.pendingRemaining = null;
+  } else if (s.phase === 'rep') {
     if (s.currentRep >= s.totalReps) {
       if (s.currentSet >= s.totalSets) { finish(); return; }
       s.phase = 'rest-set';  s.remaining = s.restSet;
@@ -730,6 +749,7 @@ function renderState() {
   document.body.className = 'phase-' + s.phase;
 
   const labels = {
+    'prepare':  ['PREPARE', 'get ready'],
     'rep':      ['REP',      'hang'],
     'rest-rep': ['REST',     'breathe'],
     'rest-set': ['SET REST', 'recover'],
@@ -742,13 +762,19 @@ function renderState() {
   document.getElementById('time-display').textContent =
     String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
 
-  const dur  = s.phase === 'rep' ? s.repLen : s.phase === 'rest-rep' ? s.restRep : s.restSet;
+  const dur  = s.phase === 'rep' ? s.repLen
+             : s.phase === 'rest-rep' ? s.restRep
+             : s.phase === 'rest-set' ? s.restSet
+             : s.prepareLen;
   const frac = dur > 0 ? s.remaining / dur : 0;
   const ring = document.getElementById('ring-progress');
   ring.style.strokeDashoffset = CIRCUMFERENCE * (1 - frac);
   ring.style.strokeDasharray  = CIRCUMFERENCE;
 
-  const col = s.phase === 'rep' ? '#848E78' : s.phase === 'rest-rep' ? '#C8A84B' : '#BD6B73';
+  const col = s.phase === 'rep' ? '#848E78'
+            : s.phase === 'rest-rep' ? '#C8A84B'
+            : s.phase === 'rest-set' ? '#BD6B73'
+            : '#DB93B0';
   ring.style.stroke = col;
 
   const repCard = document.getElementById('rep-card');
@@ -770,7 +796,20 @@ function renderState() {
 function togglePause() {
   state.paused = !state.paused;
   document.getElementById('pause-btn').textContent = state.paused ? 'Resume' : 'Pause';
-  if (!state.paused) tick();
+  if (!state.paused) {
+    const prepVal = cfg.prepare.val;
+    if (prepVal > 0) {
+      state.pendingPhase = state.phase;
+      state.pendingRemaining = state.remaining;
+      state.phase = 'prepare';
+      state.remaining = prepVal;
+      const ring = document.getElementById('ring-progress');
+      ring.style.transition = 'none';
+      ring.style.strokeDashoffset = 0;
+      void ring.getBoundingClientRect();
+    }
+    tick();
+  }
 }
 
 function stopTimer() { clearTimeout(timer); resetAll(); }
