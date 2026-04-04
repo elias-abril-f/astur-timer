@@ -411,6 +411,98 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--sage-40); border-radius: 2px; }
 
+  /* ── SAVED WORKOUTS ──────────────────────────────── */
+  .saved-section { padding: 0 20px 12px; flex-shrink: 0; }
+  .saved-label {
+    font-family: var(--font-display);
+    font-size: 7.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 8px;
+  }
+  .saved-list {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .saved-list::-webkit-scrollbar { height: 2px; }
+  .saved-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--sage-20);
+    border: 1px solid var(--sage-40);
+    border-radius: 8px;
+    padding: 8px 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .saved-chip-name {
+    font-family: var(--font-display);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--white);
+    cursor: pointer;
+    text-transform: uppercase;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .saved-chip-del {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.3);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .name-input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 14px;
+    width: 100%;
+    padding: 0;
+  }
+  .name-input::placeholder { color: rgba(255,255,255,0.2); font-style: italic; }
+  .save-btn {
+    margin: 0 20px 20px;
+    padding: 14px;
+    background: transparent;
+    color: var(--sage);
+    border: 1px solid var(--sage-40);
+    border-radius: var(--r);
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+  }
+  .save-btn:active { background: var(--sage-20); }
+
+  .shop-link {
+    font-family: var(--font-display);
+    font-size: 7px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(132,142,120,0.5);
+    text-decoration: none;
+    transition: color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .shop-link:hover { color: var(--sage); }
+
   @media (min-height: 780px) {
     .time-display { font-size: 44px; }
     .stat-value   { font-size: 32px; }
@@ -485,9 +577,12 @@
       <div class="logo-wordmark">Astur Climbing</div>
       <div class="logo-sub">Workout Timer</div>
     </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
     <svg class="header-mountain" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
       <path style="fill:#848e78" d="m 510.16308,224.67616 c -2.13857,0.24125 -4.70703,0.93666 -8.14062,1.85742 -6.44504,1.72831 -15.308,3.75182 -19.69531,4.49805 -6.01466,1.02302 -10.53394,3.99876 -18.36915,12.09375 -9.12807,9.43072 -12.12812,11.16608 -24.67773,14.28125 -7.85758,1.95046 -15.99233,5.08626 -18.07617,6.96875 -9.49637,8.57875 -16.00906,31.63192 -24.77735,87.68945 -4.21125,26.92348 -6.8213,37.10994 -14.09179,55.00586 -4.90752,12.0796 -11.97732,31.37653 -15.71094,42.88281 -3.73361,11.50628 -8.65853,23.24974 -10.94531,26.0957 l -4.15821,5.17383 -9.01367,-13.33984 c -5.50228,-8.14397 -10.44141,-13.33789 -12.68359,-13.33789 -2.01988,0 -6.68974,2.57308 -10.37695,5.71875 -3.68724,3.14567 -11.29563,9.03791 -16.90821,13.09375 -12.76691,9.22582 -19.25018,16.28877 -26.28515,28.63867 -4.75235,8.3427 -6.41834,9.69336 -11.94727,9.69336 -5.17072,0 -8.44809,-2.19046 -16.78906,-11.22461 -15.5921,-16.88786 -23.46067,-15.33345 -34.62695,6.83984 -4.45716,8.85071 -10.14242,16.40652 -15.80274,21.00196 -13.37841,10.86146 -37.20057,26.53388 -69.48437,45.88086 v 49.22851 l 824.79492,-0.41797 v -48.33203 c -43.56192,-32.026 -99.37745,-69.22306 -106.95703,-76.77929 -13.21673,-13.176 -25.50738,-24.78192 -27.31055,-25.79102 -2.06808,-1.15736 -6.69842,-0.80387 -12.54297,0.95508 -10.50284,3.16088 -15.75314,1.12004 -22.11914,-8.59571 -1.87013,-2.85418 -7.4107,-7.95034 -12.31445,-11.32421 -9.62543,-6.62248 -37.31751,-46.26616 -43.16407,-61.79493 -1.734,-4.60563 -4.34821,-9.95066 -5.375,-11.32031 -2.12061,-2.82874 -35.55479,-20.98047 -38.64453,-20.98047 -1.11103,0 -9.85987,3.67402 -19.4414,8.16407 -9.58152,4.49004 -19.12845,8.16406 -21.21485,8.16406 -2.08639,0 1.6163,2.49325 -2.73242,-1.43555 -4.34869,-3.92881 -9.25874,-7.14453 -10.91211,-7.14453 -5.06358,0 -36.16096,26.30004 -37.52539,31.73633 -1.44803,5.76941 -3.0153,6.08401 -10.60937,2.13281 -8.73505,-4.54485 -14.25445,-11.77737 -15.72071,-20.60156 -0.74608,-4.49007 -5.30584,-25.15538 -10.13281,-45.92188 -4.82694,-20.76649 -10.61243,-47.55886 -12.85547,-59.53906 -3.71948,-19.86609 -4.88915,-22.83798 -13.30078,-33.76953 -10.40228,-13.51854 -12.94561,-16.86829 -19.36133,-16.14453 z"/>
     </svg>
+    <a href="https://asturclimbing.com/shop" class="shop-link" target="_blank" rel="noopener">Shop ↗</a>
+    </div>
   </header>
 
   <svg class="mountain-divider" viewBox="0 0 480 20" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
@@ -497,6 +592,12 @@
   <!-- ── SETUP VIEW ──────────────────────────────── -->
   <div id="setup-view">
     <div class="setup-title">Configure Session</div>
+
+    <!-- saved workouts (hidden when empty) -->
+    <div id="saved-section" class="saved-section hidden">
+      <div class="saved-label">Saved Workouts</div>
+      <div id="saved-list" class="saved-list"></div>
+    </div>
 
     <div class="params-grid">
 
@@ -554,10 +655,16 @@
         </div>
       </div>
 
+      <div class="param-card span-2">
+        <div><div class="param-label">Workout Name</div><div class="param-unit">optional — for saving</div></div>
+        <input type="text" id="workout-name" class="name-input" placeholder="e.g. Crimps · 4×6" maxlength="40" autocomplete="off">
+      </div>
+
     </div>
 
     <div class="diagonal-band"></div>
     <button class="start-btn" onclick="startTimer()">▶ Start Session</button>
+    <button class="save-btn" onclick="saveWorkout()">Save Workout</button>
   </div>
 
   <!-- ── TIMER VIEW ──────────────────────────────── -->
@@ -675,7 +782,92 @@ function bindSteppers() {
     btn.addEventListener('touchcancel', stepperUp);
   });
 }
-document.addEventListener('DOMContentLoaded', bindSteppers);
+document.addEventListener('DOMContentLoaded', () => {
+  bindSteppers();
+  loadLastUsed();
+  renderSavedWorkouts();
+});
+
+// ── PERSISTENCE ───────────────────────────────────
+function saveLastUsed() {
+  const data = {};
+  for (const [k, c] of Object.entries(cfg)) data[k] = c.val;
+  localStorage.setItem('astur-last', JSON.stringify(data));
+}
+
+function loadLastUsed() {
+  try {
+    const data = JSON.parse(localStorage.getItem('astur-last'));
+    if (!data) return;
+    for (const [k, v] of Object.entries(data)) {
+      if (cfg[k]) {
+        cfg[k].val = Math.max(cfg[k].min, Math.min(cfg[k].max, +v));
+        document.getElementById('val-' + k).textContent = cfg[k].val;
+      }
+    }
+  } catch(e) {}
+}
+
+function getSavedWorkouts() {
+  try { return JSON.parse(localStorage.getItem('astur-workouts')) || []; }
+  catch(e) { return []; }
+}
+
+function saveWorkout() {
+  const nameInput = document.getElementById('workout-name');
+  const workouts = getSavedWorkouts();
+  const name = nameInput.value.trim() || ('Workout ' + (workouts.length + 1));
+  const workout = { name };
+  for (const [k, c] of Object.entries(cfg)) workout[k] = c.val;
+  workouts.push(workout);
+  localStorage.setItem('astur-workouts', JSON.stringify(workouts));
+  nameInput.value = '';
+  renderSavedWorkouts();
+}
+
+function loadWorkout(idx) {
+  const w = getSavedWorkouts()[idx];
+  if (!w) return;
+  for (const [k, v] of Object.entries(w)) {
+    if (cfg[k]) {
+      cfg[k].val = Math.max(cfg[k].min, Math.min(cfg[k].max, +v));
+      document.getElementById('val-' + k).textContent = cfg[k].val;
+    }
+  }
+  document.getElementById('workout-name').value = w.name;
+}
+
+function deleteWorkout(idx) {
+  const workouts = getSavedWorkouts();
+  workouts.splice(idx, 1);
+  localStorage.setItem('astur-workouts', JSON.stringify(workouts));
+  renderSavedWorkouts();
+}
+
+function renderSavedWorkouts() {
+  const workouts = getSavedWorkouts();
+  const section  = document.getElementById('saved-section');
+  const list     = document.getElementById('saved-list');
+  if (workouts.length === 0) { section.classList.add('hidden'); return; }
+  section.classList.remove('hidden');
+  list.innerHTML = '';
+  workouts.forEach((w, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'saved-chip';
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'saved-chip-name';
+    nameSpan.textContent = w.name;
+    nameSpan.addEventListener('click', () => loadWorkout(i));
+    const delBtn = document.createElement('button');
+    delBtn.className = 'saved-chip-del';
+    delBtn.textContent = '×';
+    delBtn.setAttribute('aria-label', 'Delete');
+    delBtn.addEventListener('click', e => { e.stopPropagation(); deleteWorkout(i); });
+    chip.appendChild(nameSpan);
+    chip.appendChild(delBtn);
+    list.appendChild(chip);
+  });
+}
 
 // ── TIMER ─────────────────────────────────────────
 let timer = null;
@@ -684,8 +876,10 @@ const CIRCUMFERENCE = 2 * Math.PI * 98;
 
 function startTimer() {
   const prepVal = cfg.prepare.val;
+  const firstPhase    = prepVal > 0 ? 'prepare' : 'rep';
+  const firstDuration = prepVal > 0 ? prepVal : cfg.repLen.val;
   state = {
-    phase: prepVal > 0 ? 'prepare' : 'rep',
+    phase: firstPhase,
     pendingPhase:     prepVal > 0 ? 'rep' : null,
     pendingRemaining: prepVal > 0 ? cfg.repLen.val : null,
     currentRep: 1,
@@ -696,53 +890,62 @@ function startTimer() {
     restRep:    cfg.restRep.val,
     restSet:    cfg.restSet.val,
     prepareLen: prepVal,
-    remaining:  prepVal > 0 ? prepVal : cfg.repLen.val,
+    phaseTotal:     firstDuration,
+    phaseStartedAt: Date.now(),
+    remaining:      firstDuration,
     paused: false,
+    pausedRemaining: null,
   };
+  saveLastUsed();
   document.getElementById('setup-view').classList.add('hidden');
   document.getElementById('timer-view').classList.remove('hidden');
   renderState();
-  state.remaining--;
-  timer = setTimeout(tick, 1000);
+  scheduleTick();
+}
+
+// Schedule next tick precisely at the next whole-second boundary of the phase.
+function scheduleTick() {
+  const msElapsed = Date.now() - state.phaseStartedAt;
+  const msToNext  = 1000 - (msElapsed % 1000);
+  timer = setTimeout(tick, msToNext);
 }
 
 function tick() {
   if (state.paused) return;
+  const elapsed  = Math.floor((Date.now() - state.phaseStartedAt) / 1000);
+  state.remaining = Math.max(0, state.phaseTotal - elapsed);
   renderState();
-  if (state.remaining <= 0) {
-    timer = setTimeout(advancePhase, 1000);
-    return;
-  }
-  state.remaining--;
-  timer = setTimeout(tick, 1000);
+  if (state.remaining <= 0) { advancePhase(); return; }
+  scheduleTick();
 }
 
 function advancePhase() {
   const s = state;
   if (s.phase === 'prepare') {
     s.phase = s.pendingPhase;
-    s.remaining = s.pendingRemaining;
+    s.phaseTotal = s.pendingRemaining;
     s.pendingPhase = null;
     s.pendingRemaining = null;
   } else if (s.phase === 'rep') {
     if (s.currentRep >= s.totalReps) {
       if (s.currentSet >= s.totalSets) { finish(); return; }
-      s.phase = 'rest-set';  s.remaining = s.restSet;
+      s.phase = 'rest-set';  s.phaseTotal = s.restSet;
     } else {
-      s.phase = 'rest-rep';  s.remaining = s.restRep;
+      s.phase = 'rest-rep';  s.phaseTotal = s.restRep;
     }
   } else if (s.phase === 'rest-rep') {
-    s.currentRep++;  s.phase = 'rep';  s.remaining = s.repLen;
+    s.currentRep++;  s.phase = 'rep';  s.phaseTotal = s.repLen;
   } else if (s.phase === 'rest-set') {
-    s.currentSet++;  s.currentRep = 1;  s.phase = 'rep';  s.remaining = s.repLen;
+    s.currentSet++;  s.currentRep = 1;  s.phase = 'rep';  s.phaseTotal = s.repLen;
   }
+  s.phaseStartedAt = Date.now();
+  s.remaining      = s.phaseTotal;
   const ring = document.getElementById('ring-progress');
   ring.style.transition = 'none';
   ring.style.strokeDashoffset = 0;
   void ring.getBoundingClientRect();
   renderState();
-  state.remaining--;
-  timer = setTimeout(tick, 1000);
+  scheduleTick();
 }
 
 function renderState() {
@@ -763,11 +966,7 @@ function renderState() {
   document.getElementById('time-display').textContent =
     String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
 
-  const dur  = s.phase === 'rep' ? s.repLen
-             : s.phase === 'rest-rep' ? s.restRep
-             : s.phase === 'rest-set' ? s.restSet
-             : s.prepareLen;
-  const frac = dur > 0 ? s.remaining / dur : 0;
+  const frac = s.phaseTotal > 0 ? s.remaining / s.phaseTotal : 0;
   const ring = document.getElementById('ring-progress');
   ring.style.strokeDashoffset = CIRCUMFERENCE * (1 - frac);
   ring.style.strokeDasharray  = CIRCUMFERENCE;
@@ -797,19 +996,34 @@ function renderState() {
 function togglePause() {
   state.paused = !state.paused;
   document.getElementById('pause-btn').textContent = state.paused ? 'Resume' : 'Pause';
-  if (!state.paused) {
+  if (state.paused) {
+    clearTimeout(timer);
+    // Snapshot how many seconds remain so we can restore on resume.
+    const elapsed = Math.floor((Date.now() - state.phaseStartedAt) / 1000);
+    state.pausedRemaining = Math.max(0, state.phaseTotal - elapsed);
+    state.remaining = state.pausedRemaining;
+    renderState();
+  } else {
     const prepVal = cfg.prepare.val;
     if (prepVal > 0) {
-      state.pendingPhase = state.phase;
-      state.pendingRemaining = state.remaining;
-      state.phase = 'prepare';
-      state.remaining = prepVal;
+      // Show prepare countdown before resuming, then return to paused position.
+      state.pendingPhase     = state.phase;
+      state.pendingRemaining = state.pausedRemaining; // resume with this many seconds left
+      state.phase      = 'prepare';
+      state.phaseTotal = prepVal;
+      state.remaining  = prepVal;
+      state.phaseStartedAt = Date.now();
       const ring = document.getElementById('ring-progress');
       ring.style.transition = 'none';
       ring.style.strokeDashoffset = 0;
       void ring.getBoundingClientRect();
+    } else {
+      // Shift phaseStartedAt so the remaining time is preserved exactly.
+      state.phaseStartedAt = Date.now() - (state.phaseTotal - state.pausedRemaining) * 1000;
+      state.remaining = state.pausedRemaining;
     }
-    tick();
+    state.pausedRemaining = null;
+    scheduleTick();
   }
 }
 
@@ -830,6 +1044,15 @@ function resetAll() {
   document.getElementById('pause-btn').textContent = 'Pause';
   document.body.className = '';
 }
+
+// ── BACKGROUND / FOREGROUND SYNC ─────────────────
+// When iOS un-throttles the page on return to foreground, immediately
+// recalculate the elapsed time and catch up to the correct phase/count.
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden || !timer || state.paused) return;
+  clearTimeout(timer);
+  tick();
+});
 
 // ── STAT BAR COLOUR ───────────────────────────────
 const barStyleEl = document.createElement('style');
