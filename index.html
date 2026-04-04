@@ -897,6 +897,7 @@ function startTimer() {
     pausedRemaining: null,
   };
   saveLastUsed();
+  acquireWakeLock();
   document.getElementById('setup-view').classList.add('hidden');
   document.getElementById('timer-view').classList.remove('hidden');
   renderState();
@@ -998,12 +999,14 @@ function togglePause() {
   document.getElementById('pause-btn').textContent = state.paused ? 'Resume' : 'Pause';
   if (state.paused) {
     clearTimeout(timer);
+    releaseWakeLock();
     // Snapshot how many seconds remain so we can restore on resume.
     const elapsed = Math.floor((Date.now() - state.phaseStartedAt) / 1000);
     state.pausedRemaining = Math.max(0, state.phaseTotal - elapsed);
     state.remaining = state.pausedRemaining;
     renderState();
   } else {
+    acquireWakeLock();
     const prepVal = cfg.prepare.val;
     if (prepVal > 0) {
       // Show prepare countdown before resuming, then return to paused position.
@@ -1027,10 +1030,11 @@ function togglePause() {
   }
 }
 
-function stopTimer() { clearTimeout(timer); resetAll(); }
+function stopTimer() { clearTimeout(timer); releaseWakeLock(); resetAll(); }
 
 function finish() {
   clearTimeout(timer);
+  releaseWakeLock();
   document.getElementById('done-sub').textContent =
     state.totalSets + ' sets · ' + state.totalReps + ' reps each. Rest up.';
   document.getElementById('done-overlay').classList.remove('hidden');
@@ -1044,6 +1048,26 @@ function resetAll() {
   document.getElementById('pause-btn').textContent = 'Pause';
   document.body.className = '';
 }
+
+// ── WAKE LOCK ─────────────────────────────────────
+let wakeLock = null;
+
+async function acquireWakeLock() {
+  if (!('wakeLock' in navigator)) return;
+  try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
+}
+
+function releaseWakeLock() {
+  if (!wakeLock) return;
+  wakeLock.release();
+  wakeLock = null;
+}
+
+// Re-acquire after returning to foreground (wake lock is released automatically
+// when the page is hidden).
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && timer && !state.paused) acquireWakeLock();
+});
 
 // ── BACKGROUND / FOREGROUND SYNC ─────────────────
 // When iOS un-throttles the page on return to foreground, immediately
